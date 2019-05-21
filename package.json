@@ -11,7 +11,6 @@
   "dependencies": {
     "core-js": "^2.6.5",
     "lodash-es": "^4.17.11",
-    "pure-random": "^0.1.1",
     "ramda": "^0.26.1",
     "vue": "^2.6.10",
     "vuex": "^3.0.1"
