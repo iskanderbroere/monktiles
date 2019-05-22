@@ -21,5 +21,11 @@ module.exports = {
   watchPlugins: [
     'jest-watch-typeahead/filename',
     'jest-watch-typeahead/testname'
+  ],
+  collectCoverage: true,
+  collectCoverageFrom: [
+    'src/**/*.js',
+    'src/components/**/*.vue',
+    '!src/main.js' // No need to cover bootstrap file
   ]
 }
