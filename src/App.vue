@@ -16,11 +16,13 @@
         </transition>
       </template>
     </PuzzleGrid>
+    <h1>Game is won: {{ gameIsWon }}</h1>
+    <h2>Steps: {{ steps }}</h2>
   </div>
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions } from 'vuex'
+import { mapState, mapMutations, mapActions, mapGetters } from 'vuex'
 import { gridSize } from '@/constants'
 import PuzzleGrid from '@/components/PuzzleGrid.vue'
 import PuzzleGridItem from '@/components/PuzzleGridItem.vue'
@@ -31,7 +33,10 @@ export default {
     PuzzleGrid,
     PuzzleGridItem
   },
-  computed: mapState(['puzzlePieces', 'steps']),
+  computed: {
+    ...mapState(['puzzlePieces', 'steps']),
+    ...mapGetters(['gameIsWon'])
+  },
   methods: {
     ...mapMutations(['startPuzzle']),
     ...mapActions(['clickPuzzlePiece'])

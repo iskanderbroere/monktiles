@@ -1,7 +1,19 @@
 import { shuffle } from 'lodash-es'
 import { gridSize, puzzlePieces } from '@/constants'
 import { mapIndexed } from '@/utils'
-import { modulo, concat, curry, find, propEq, map, omit } from 'ramda'
+import {
+  modulo,
+  concat,
+  curry,
+  find,
+  propEq,
+  map,
+  omit,
+  sortBy,
+  prop,
+  equals,
+  dropLast
+} from 'ramda'
 
 export const getXPosition = curry((gridSize, puzzlePieceIndex) =>
   modulo(puzzlePieceIndex, gridSize)
@@ -72,6 +84,20 @@ export const movePuzzlePiece = curry((puzzlePieces, { puzzlePieceNumber }) =>
     return puzzleGridItem
   }, puzzlePieces)
 )
+
+export const gameIsWon = puzzlePieces => {
+  const sortByPuzzlePieceNumber = sortBy(prop('puzzlePieceNumber'))
+  const sortedPuzzlePieces = sortByPuzzlePieceNumber(puzzlePieces)
+  const sortedPuzzlePieceNumbers = dropLast(
+    1,
+    map(({ puzzlePieceNumber }) => puzzlePieceNumber, sortedPuzzlePieces)
+  )
+  const puzzlePieceNumbers = dropLast(
+    1,
+    map(({ puzzlePieceNumber }) => puzzlePieceNumber, puzzlePieces)
+  )
+  return equals(sortedPuzzlePieceNumbers, puzzlePieceNumbers)
+}
 
 export const createPuzzlePieces = () => {
   const shuffledPuzzlePieces = getShuffledPuzzlePieces()

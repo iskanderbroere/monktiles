@@ -3,7 +3,8 @@ import {
   getYPosition,
   mapPositionToPuzzlePieces,
   puzzlePieceCanBeMoved,
-  movePuzzlePiece
+  movePuzzlePiece,
+  gameIsWon
 } from '@/puzzleHelpers'
 
 const shuffledPuzzlePieces = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
@@ -90,22 +91,31 @@ describe('puzzlePieceCanBeMoved', () => {
 
 describe('movePuzzlePiece', () => {
   const movePuzzlePieceWithPieces = movePuzzlePiece(mockPuzzlePieces)
-  expect(movePuzzlePieceWithPieces(mockPuzzlePieces[14])).toEqual([
-    { empty: false, puzzlePieceNumber: 1, x: 0, y: 0 },
-    { empty: false, puzzlePieceNumber: 2, x: 1, y: 0 },
-    { empty: false, puzzlePieceNumber: 3, x: 2, y: 0 },
-    { empty: false, puzzlePieceNumber: 4, x: 3, y: 0 },
-    { empty: false, puzzlePieceNumber: 5, x: 0, y: 1 },
-    { empty: false, puzzlePieceNumber: 6, x: 1, y: 1 },
-    { empty: false, puzzlePieceNumber: 7, x: 2, y: 1 },
-    { empty: false, puzzlePieceNumber: 8, x: 3, y: 1 },
-    { empty: false, puzzlePieceNumber: 9, x: 0, y: 2 },
-    { empty: false, puzzlePieceNumber: 10, x: 1, y: 2 },
-    { empty: false, puzzlePieceNumber: 11, x: 2, y: 2 },
-    { empty: false, puzzlePieceNumber: 12, x: 3, y: 2 },
-    { empty: false, puzzlePieceNumber: 13, x: 0, y: 3 },
-    { empty: false, puzzlePieceNumber: 14, x: 1, y: 3 },
-    { empty: true, x: 2, y: 3 },
-    { empty: false, x: 3, y: 3, puzzlePieceNumber: 15 }
-  ])
+  it('correctly moves puzzle piece', () => {
+    expect(movePuzzlePieceWithPieces(mockPuzzlePieces[14])).toEqual([
+      { empty: false, puzzlePieceNumber: 1, x: 0, y: 0 },
+      { empty: false, puzzlePieceNumber: 2, x: 1, y: 0 },
+      { empty: false, puzzlePieceNumber: 3, x: 2, y: 0 },
+      { empty: false, puzzlePieceNumber: 4, x: 3, y: 0 },
+      { empty: false, puzzlePieceNumber: 5, x: 0, y: 1 },
+      { empty: false, puzzlePieceNumber: 6, x: 1, y: 1 },
+      { empty: false, puzzlePieceNumber: 7, x: 2, y: 1 },
+      { empty: false, puzzlePieceNumber: 8, x: 3, y: 1 },
+      { empty: false, puzzlePieceNumber: 9, x: 0, y: 2 },
+      { empty: false, puzzlePieceNumber: 10, x: 1, y: 2 },
+      { empty: false, puzzlePieceNumber: 11, x: 2, y: 2 },
+      { empty: false, puzzlePieceNumber: 12, x: 3, y: 2 },
+      { empty: false, puzzlePieceNumber: 13, x: 0, y: 3 },
+      { empty: false, puzzlePieceNumber: 14, x: 1, y: 3 },
+      { empty: true, x: 2, y: 3 },
+      { empty: false, x: 3, y: 3, puzzlePieceNumber: 15 }
+    ])
+  })
+})
+
+describe('gameIsWon', () => {
+  it('returns true when pieces are in correct order', () => {
+    const wonGame = gameIsWon(mockPuzzlePieces)
+    expect(wonGame).toBe(true)
+  })
 })
