@@ -1,6 +1,6 @@
 import { shuffle } from 'lodash-es'
 import { gridSize, puzzlePieces } from '@/constants'
-import { mapIndexed, diff } from '@/utils'
+import { mapIndexed } from '@/utils'
 import {
   modulo,
   concat,
@@ -11,7 +11,8 @@ import {
   omit,
   sort,
   equals,
-  pluck
+  pluck,
+  subtract
 } from 'ramda'
 
 /**
@@ -110,7 +111,7 @@ export const gameIsWon = puzzlePieces => {
   // only the puzzle piece numbers
   const puzzlePieceNumbers = getPuzzlePieceNumbers(puzzlePieces)
   // sort to expected order
-  const sortedPuzzlePieceNumbers = sort(diff, puzzlePieceNumbers)
+  const sortedPuzzlePieceNumbers = sort(subtract, puzzlePieceNumbers)
   // compare to original
   return equals(sortedPuzzlePieceNumbers, getPuzzlePieceNumbers(puzzlePieces))
 }
