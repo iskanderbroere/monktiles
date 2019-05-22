@@ -14,19 +14,22 @@ import {
   pluck
 } from 'ramda'
 
+/**
+ * Get X position based on array index and grid size
+ */
 export const getXPosition = curry((gridSize, puzzlePieceIndex) =>
   modulo(puzzlePieceIndex, gridSize)
 )
 
+/**
+ * Get Y position based on array index and grid size
+ */
 export const getYPosition = curry((gridSize, puzzlePieceIndex) =>
   Math.floor(puzzlePieceIndex / gridSize)
 )
 
-export const getShuffledPuzzlePieces = () => shuffle(puzzlePieces)
-
 export const mapPositionToPuzzlePieces = shuffledPuzzlePieces => {
-  // todo - better name
-  const puzzlePieces = mapIndexed((puzzlePiece, index) => {
+  const mappedPuzzlePieces = mapIndexed((puzzlePiece, index) => {
     return {
       puzzlePieceNumber: puzzlePiece,
       empty: false,
@@ -34,7 +37,7 @@ export const mapPositionToPuzzlePieces = shuffledPuzzlePieces => {
       y: getYPosition(gridSize, index)
     }
   }, shuffledPuzzlePieces)
-  return concat(puzzlePieces, [
+  return concat(mappedPuzzlePieces, [
     {
       empty: true,
       // last place in grid
@@ -100,6 +103,6 @@ export const gameIsWon = puzzlePieces => {
 }
 
 export const createPuzzlePieces = () => {
-  const shuffledPuzzlePieces = getShuffledPuzzlePieces()
+  const shuffledPuzzlePieces = shuffle(puzzlePieces)
   return mapPositionToPuzzlePieces(shuffledPuzzlePieces)
 }
