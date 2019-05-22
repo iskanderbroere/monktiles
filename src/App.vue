@@ -9,7 +9,7 @@
         >
           <PuzzleGridItem
             @click="clickPuzzlePiece(puzzleGridItem)"
-            v-if="!puzzleGridItem.empty"
+            v-if="!puzzleGridItem.empty && !gameIsWon"
             v-bind="puzzleGridItem"
           />
           <div v-else></div>
