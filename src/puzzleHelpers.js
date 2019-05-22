@@ -12,7 +12,8 @@ import {
   sortBy,
   prop,
   equals,
-  dropLast
+  dropLast,
+  pluck
 } from 'ramda'
 
 export const getXPosition = curry((gridSize, puzzlePieceIndex) =>
@@ -85,17 +86,16 @@ export const movePuzzlePiece = curry((puzzlePieces, { puzzlePieceNumber }) =>
   }, puzzlePieces)
 )
 
+const getPuzzlePieceNumbers = pluck('puzzlePieceNumber')
+
 export const gameIsWon = puzzlePieces => {
   const sortByPuzzlePieceNumber = sortBy(prop('puzzlePieceNumber'))
   const sortedPuzzlePieces = sortByPuzzlePieceNumber(puzzlePieces)
   const sortedPuzzlePieceNumbers = dropLast(
     1,
-    map(({ puzzlePieceNumber }) => puzzlePieceNumber, sortedPuzzlePieces)
+    getPuzzlePieceNumbers(sortedPuzzlePieces)
   )
-  const puzzlePieceNumbers = dropLast(
-    1,
-    map(({ puzzlePieceNumber }) => puzzlePieceNumber, puzzlePieces)
-  )
+  const puzzlePieceNumbers = dropLast(1, getPuzzlePieceNumbers(puzzlePieces))
   return equals(sortedPuzzlePieceNumbers, puzzlePieceNumbers)
 }
 
