@@ -1,7 +1,7 @@
 <template>
   <div id="app" :class="$style.app">
     <PuzzleGrid :grid-size="gridSize">
-      <template v-for="puzzleGridItem in puzzleGridItems">
+      <template v-for="puzzleGridItem in puzzlePieces">
         <transition
           name="fade"
           mode="out-in"
@@ -31,7 +31,7 @@ export default {
     PuzzleGrid,
     PuzzleGridItem
   },
-  computed: mapState(['puzzleGridItems', 'steps']),
+  computed: mapState(['puzzlePieces', 'steps']),
   methods: {
     ...mapMutations(['startPuzzle']),
     ...mapActions(['clickPuzzlePiece'])
