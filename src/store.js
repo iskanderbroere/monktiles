@@ -1,9 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { map, concat, omit, find } from 'ramda'
-import { puzzlePieces as randomPuzzlePieces, gridSize } from '@/constants'
-import { getYPosition, getXPosition, mapIndexed } from '@/utils'
-import { shuffle } from 'lodash-es'
+import { map, omit, find } from 'ramda'
+import { createPuzzlePieces } from '@/puzzleHelpers'
 
 Vue.use(Vuex)
 
@@ -13,30 +11,58 @@ export default new Vuex.Store({
     puzzleGridItems: []
   },
   mutations: {
+    /**
+     * Start the puzzle with randomized puzzle pieces
+     */
     startPuzzle(state) {
-      const shuffledPuzzlePieces = shuffle(randomPuzzlePieces)
-      // todo - better name
-      const puzzlePieces = mapIndexed((puzzlePiece, index) => {
-        return {
-          puzzlePieceNumber: puzzlePiece,
-          empty: false,
-          x: getXPosition(index),
-          y: getYPosition(index)
-        }
-      }, shuffledPuzzlePieces)
-      const puzzlePiecesObjectWithEmptyPiece = concat(puzzlePieces, [
-        {
-          empty: true,
-          // last place in grid
-          x: gridSize - 1,
-          y: gridSize - 1
-        }
-      ])
-      state.puzzleGridItems = puzzlePiecesObjectWithEmptyPiece
+      const puzzlePieces = createPuzzlePieces()
+      state.puzzleGridItems = puzzlePieces
     },
-    movePuzzlePiece(state, { empty, puzzlePieceNumber, x, y }) {
+    /**
+     * Move a puzzle piece to the empty puzzle piece spot
+     * @param {*} state Vuex state
+     * @param {*} puzzlePiece The puzzle piece to move
+     */
+    movePuzzlePiece(state, { puzzlePieceNumber }) {
+      state.puzzleGridItems = map(puzzleGridItem => {
+        // puzzle piece to move the empty piece to
+        if (puzzleGridItem.puzzlePieceNumber === puzzlePieceNumber) {
+          return {
+            ...omit(['puzzlePieceNumber'], puzzleGridItem),
+            empty: true
+          }
+        }
+        // empty puzzle piece to move clicked piece to
+        if (puzzleGridItem.empty) {
+          return {
+            ...puzzleGridItem,
+            puzzlePieceNumber,
+            empty: false
+          }
+        }
+        return puzzleGridItem
+      }, state.puzzleGridItems)
+    },
+    /**
+     * Increment the step count in state
+     */
+    incrementStep(state) {
+      state.steps++
+    }
+  },
+  actions: {
+    /**
+     * Check if puzzle piece can be moved
+     * @param {*} context Vuex context https://vuex.vuejs.org/api/#actions
+     * @param {*} puzzlePieceToMove the puzzle piece clicked by the user
+     */
+    clickPuzzlePiece({ commit, state }, puzzlePieceToMove) {
+      const { empty, x, y } = puzzlePieceToMove
+
+      // empty puzzle piece is clicked
       if (empty) return
 
+      // find the position of the empty puzzle piece in state
       const { x: emptyX, y: emptyY } = find(
         ({ empty }) => empty,
         state.puzzleGridItems
@@ -50,22 +76,8 @@ export default new Vuex.Store({
       // clicked puzzle piece is more than one grid tile away
       if (yDelta > 1 || xDelta > 1) return
 
-      state.puzzleGridItems = map(puzzleGridItem => {
-        if (puzzleGridItem.puzzlePieceNumber === puzzlePieceNumber) {
-          return {
-            ...omit(['puzzlePieceNumber'], puzzleGridItem),
-            empty: true
-          }
-        }
-        if (puzzleGridItem.empty) {
-          return {
-            ...puzzleGridItem,
-            puzzlePieceNumber,
-            empty: false
-          }
-        }
-        return puzzleGridItem
-      }, state.puzzleGridItems)
+      commit('movePuzzlePiece', puzzlePieceToMove)
+      commit('incrementStep')
     }
   }
 })

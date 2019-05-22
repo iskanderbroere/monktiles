@@ -8,11 +8,11 @@
           :key="puzzleGridItem.puzzlePieceNumber"
         >
           <PuzzleGridItem
-            @click="movePuzzlePiece(puzzleGridItem)"
+            @click="clickPuzzlePiece(puzzleGridItem)"
             v-if="!puzzleGridItem.empty"
             v-bind="puzzleGridItem"
           />
-          <div v-else>{{ { x: puzzleGridItem.x, y: puzzleGridItem.y } }}</div>
+          <div v-else></div>
         </transition>
       </template>
     </PuzzleGrid>
@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 import { gridSize } from '@/constants'
 import PuzzleGrid from '@/components/PuzzleGrid.vue'
 import PuzzleGridItem from '@/components/PuzzleGridItem.vue'
@@ -32,7 +32,10 @@ export default {
     PuzzleGridItem
   },
   computed: mapState(['puzzleGridItems', 'steps']),
-  methods: mapMutations(['startPuzzle', 'movePuzzlePiece']),
+  methods: {
+    ...mapMutations(['startPuzzle']),
+    ...mapActions(['clickPuzzlePiece'])
+  },
   created() {
     this.gridSize = gridSize
     this.startPuzzle()

@@ -4,7 +4,7 @@
     :class="$style.puzzle_grid_item"
     :style="style"
   >
-    <h1 :class="$style.puzzle_grid_item_number">{{ { x, y } }}</h1>
+    <h1 :class="$style.puzzle_grid_item_number">{{ puzzlePieceNumber }}</h1>
   </li>
 </template>
 
