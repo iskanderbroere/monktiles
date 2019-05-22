@@ -1,16 +1,29 @@
 import {
   getXPosition,
   getYPosition,
-  mapPositionToPuzzlePieces
+  mapPositionToPuzzlePieces,
+  puzzlePieceCanBeMoved,
+  movePuzzlePiece
 } from '@/puzzleHelpers'
 
-const shuffledPuzzlePieces = [1, 2, 3, 4]
+const shuffledPuzzlePieces = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 
 const mockPuzzlePieces = [
-  { puzzlePieceNumber: 1, empty: false, x: 0, y: 0 },
-  { puzzlePieceNumber: 2, empty: false, x: 1, y: 0 },
-  { puzzlePieceNumber: 3, empty: false, x: 2, y: 0 },
-  { puzzlePieceNumber: 4, empty: false, x: 3, y: 0 },
+  { empty: false, puzzlePieceNumber: 1, x: 0, y: 0 },
+  { empty: false, puzzlePieceNumber: 2, x: 1, y: 0 },
+  { empty: false, puzzlePieceNumber: 3, x: 2, y: 0 },
+  { empty: false, puzzlePieceNumber: 4, x: 3, y: 0 },
+  { empty: false, puzzlePieceNumber: 5, x: 0, y: 1 },
+  { empty: false, puzzlePieceNumber: 6, x: 1, y: 1 },
+  { empty: false, puzzlePieceNumber: 7, x: 2, y: 1 },
+  { empty: false, puzzlePieceNumber: 8, x: 3, y: 1 },
+  { empty: false, puzzlePieceNumber: 9, x: 0, y: 2 },
+  { empty: false, puzzlePieceNumber: 10, x: 1, y: 2 },
+  { empty: false, puzzlePieceNumber: 11, x: 2, y: 2 },
+  { empty: false, puzzlePieceNumber: 12, x: 3, y: 2 },
+  { empty: false, puzzlePieceNumber: 13, x: 0, y: 3 },
+  { empty: false, puzzlePieceNumber: 14, x: 1, y: 3 },
+  { empty: false, puzzlePieceNumber: 15, x: 2, y: 3 },
   { empty: true, x: 3, y: 3 }
 ]
 
@@ -48,4 +61,51 @@ describe('Position helpers', () => {
     const yPosition5 = getYPositionGridSize4(4)
     expect(yPosition5).toBe(1)
   })
+})
+
+describe('puzzlePieceCanBeMoved', () => {
+  const puzzlePieceCanBeMovedWithMockPieces = puzzlePieceCanBeMoved(
+    mockPuzzlePieces
+  )
+  it('returns false when piece is empty', () => {
+    expect(puzzlePieceCanBeMovedWithMockPieces(mockPuzzlePieces[14])).toBe(true)
+    expect(puzzlePieceCanBeMovedWithMockPieces(mockPuzzlePieces[11])).toBe(true)
+  })
+  it('returns false when piece is empty', () => {
+    expect(puzzlePieceCanBeMovedWithMockPieces(mockPuzzlePieces[15])).toBe(
+      false
+    )
+  })
+  it('returns false when piece is not adjacent on x or y axis', () => {
+    expect(puzzlePieceCanBeMovedWithMockPieces(mockPuzzlePieces[10])).toBe(
+      false
+    )
+  })
+  it('returns false when piece is more than one grid tile away', () => {
+    expect(puzzlePieceCanBeMovedWithMockPieces(mockPuzzlePieces[13])).toBe(
+      false
+    )
+  })
+})
+
+describe('movePuzzlePiece', () => {
+  const movePuzzlePieceWithPieces = movePuzzlePiece(mockPuzzlePieces)
+  expect(movePuzzlePieceWithPieces(mockPuzzlePieces[14])).toEqual([
+    { empty: false, puzzlePieceNumber: 1, x: 0, y: 0 },
+    { empty: false, puzzlePieceNumber: 2, x: 1, y: 0 },
+    { empty: false, puzzlePieceNumber: 3, x: 2, y: 0 },
+    { empty: false, puzzlePieceNumber: 4, x: 3, y: 0 },
+    { empty: false, puzzlePieceNumber: 5, x: 0, y: 1 },
+    { empty: false, puzzlePieceNumber: 6, x: 1, y: 1 },
+    { empty: false, puzzlePieceNumber: 7, x: 2, y: 1 },
+    { empty: false, puzzlePieceNumber: 8, x: 3, y: 1 },
+    { empty: false, puzzlePieceNumber: 9, x: 0, y: 2 },
+    { empty: false, puzzlePieceNumber: 10, x: 1, y: 2 },
+    { empty: false, puzzlePieceNumber: 11, x: 2, y: 2 },
+    { empty: false, puzzlePieceNumber: 12, x: 3, y: 2 },
+    { empty: false, puzzlePieceNumber: 13, x: 0, y: 3 },
+    { empty: false, puzzlePieceNumber: 14, x: 1, y: 3 },
+    { empty: true, x: 2, y: 3 },
+    { empty: false, x: 3, y: 3, puzzlePieceNumber: 15 }
+  ])
 })
