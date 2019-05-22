@@ -1,6 +1,6 @@
 import { shuffle } from 'lodash-es'
 import { gridSize, puzzlePieces } from '@/constants'
-import { mapIndexed } from '@/utils'
+import { mapIndexed, diff } from '@/utils'
 import {
   modulo,
   concat,
@@ -9,8 +9,7 @@ import {
   propEq,
   map,
   omit,
-  sortBy,
-  prop,
+  sort,
   equals,
   dropLast,
   pluck
@@ -89,14 +88,20 @@ export const movePuzzlePiece = curry((puzzlePieces, { puzzlePieceNumber }) =>
 const getPuzzlePieceNumbers = pluck('puzzlePieceNumber')
 
 export const gameIsWon = puzzlePieces => {
-  const sortByPuzzlePieceNumber = sortBy(prop('puzzlePieceNumber'))
-  const sortedPuzzlePieces = sortByPuzzlePieceNumber(puzzlePieces)
-  const sortedPuzzlePieceNumbers = dropLast(
+  const puzzlePieceNumbers = getPuzzlePieceNumbers(puzzlePieces)
+  const sortedPuzzlePieceNumbers = sort(diff, puzzlePieceNumbers)
+  const sortedPuzzlePieceNumbersWithoutEmpty = dropLast(
     1,
-    getPuzzlePieceNumbers(sortedPuzzlePieces)
+    sortedPuzzlePieceNumbers
   )
-  const puzzlePieceNumbers = dropLast(1, getPuzzlePieceNumbers(puzzlePieces))
-  return equals(sortedPuzzlePieceNumbers, puzzlePieceNumbers)
+  const expectedPuzzlePieceNumbersWithoutEmpty = dropLast(
+    1,
+    getPuzzlePieceNumbers(puzzlePieces)
+  )
+  return equals(
+    sortedPuzzlePieceNumbersWithoutEmpty,
+    expectedPuzzlePieceNumbersWithoutEmpty
+  )
 }
 
 export const createPuzzlePieces = () => {
