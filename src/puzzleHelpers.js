@@ -3,11 +3,11 @@ import { gridSize, puzzlePieces } from '@/constants'
 import { mapIndexed } from '@/utils'
 import { modulo, concat, curry } from 'ramda'
 
-export const getXPosition = curry((puzzlePieceIndex, gridSize) =>
+export const getXPosition = curry((gridSize, puzzlePieceIndex) =>
   modulo(puzzlePieceIndex, gridSize)
 )
 
-export const getYPosition = curry((puzzlePieceIndex, gridSize) =>
+export const getYPosition = curry((gridSize, puzzlePieceIndex) =>
   Math.floor(puzzlePieceIndex / gridSize)
 )
 
@@ -19,8 +19,8 @@ export const mapPositionToPuzzlePieces = shuffledPuzzlePieces => {
     return {
       puzzlePieceNumber: puzzlePiece,
       empty: false,
-      x: getXPosition(index)(gridSize),
-      y: getYPosition(index)(gridSize)
+      x: getXPosition(gridSize)(index),
+      y: getYPosition(gridSize)(index)
     }
   }, shuffledPuzzlePieces)
   return concat(puzzlePieces, [
