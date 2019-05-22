@@ -28,7 +28,10 @@ export const getYPosition = curry((gridSize, puzzlePieceIndex) =>
   Math.floor(puzzlePieceIndex / gridSize)
 )
 
-export const mapPositionToPuzzlePieces = shuffledPuzzlePieces => {
+/**
+ * Map puzzle piece numbers to objects with position and empty state
+ */
+export const mapPositionToPuzzlePieces = shuffledPuzzlePieceNumbers => {
   const mappedPuzzlePieces = mapIndexed((puzzlePiece, index) => {
     return {
       puzzlePieceNumber: puzzlePiece,
@@ -36,7 +39,7 @@ export const mapPositionToPuzzlePieces = shuffledPuzzlePieces => {
       x: getXPosition(gridSize, index),
       y: getYPosition(gridSize, index)
     }
-  }, shuffledPuzzlePieces)
+  }, shuffledPuzzlePieceNumbers)
   return concat(mappedPuzzlePieces, [
     {
       empty: true,
@@ -70,6 +73,9 @@ export const puzzlePieceCanBeMoved = curry((puzzlePieces, { empty, x, y }) => {
   return true
 })
 
+/**
+ * Moves a puzzle piece
+ */
 export const movePuzzlePiece = curry((puzzlePieces, { puzzlePieceNumber }) =>
   map(puzzleGridItem => {
     // puzzle piece to move the empty piece to
@@ -91,8 +97,15 @@ export const movePuzzlePiece = curry((puzzlePieces, { puzzlePieceNumber }) =>
   }, puzzlePieces)
 )
 
+/**
+ * Pluck puzzle piece numbers from an array of puzzle piece objects
+ */
 const getPuzzlePieceNumbers = pluck('puzzlePieceNumber')
 
+/**
+ * Whether the puzzle pieces are in the right order
+ * @param {*} puzzlePieces Puzzle pieces to check
+ */
 export const gameIsWon = puzzlePieces => {
   // only the puzzle piece numbers
   const puzzlePieceNumbers = getPuzzlePieceNumbers(puzzlePieces)
