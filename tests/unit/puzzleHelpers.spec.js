@@ -1,4 +1,8 @@
-import { getXPosition, mapPositionToPuzzlePieces } from '@/puzzleHelpers'
+import {
+  getXPosition,
+  getYPosition,
+  mapPositionToPuzzlePieces
+} from '@/puzzleHelpers'
 
 const shuffledPuzzlePieces = [1, 2, 3, 4]
 
@@ -29,5 +33,17 @@ describe('Position helpers', () => {
     expect(xPosition4).toBe(3)
     const xPosition5 = getXPosition(4)(4)
     expect(xPosition5).toBe(0)
+  })
+  it('gets y position based on index', () => {
+    const yPosition1 = getYPosition(1)(4)
+    expect(yPosition1).toBe(0)
+    const yPosition2 = getYPosition(2)(4)
+    expect(yPosition2).toBe(0)
+    const yPosition3 = getYPosition(5)(4)
+    expect(yPosition3).toBe(1)
+    const yPosition4 = getYPosition(19)(4)
+    expect(yPosition4).toBe(4)
+    const yPosition5 = getYPosition(4)(4)
+    expect(yPosition5).toBe(1)
   })
 })
