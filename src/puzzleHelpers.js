@@ -1,14 +1,15 @@
 import { shuffle } from 'lodash-es'
 import { gridSize, puzzlePieces } from '@/constants'
 import { mapIndexed } from '@/utils'
-import { modulo, concat } from 'ramda'
+import { modulo, concat, curry } from 'ramda'
 
-export const getYPosition = puzzlePieceIndex =>
+export const getXPosition = curry((puzzlePieceIndex, gridSize) =>
+  modulo(puzzlePieceIndex, gridSize)
+)
+
+export const getYPosition = curry((puzzlePieceIndex, gridSize) =>
   Math.floor(puzzlePieceIndex / gridSize)
-
-export const getXPosition = puzzlePieceIndex => {
-  return modulo(puzzlePieceIndex, gridSize)
-}
+)
 
 export const getShuffledPuzzlePieces = () => shuffle(puzzlePieces)
 
@@ -18,8 +19,8 @@ export const mapPositionToPuzzlePieces = shuffledPuzzlePieces => {
     return {
       puzzlePieceNumber: puzzlePiece,
       empty: false,
-      x: getXPosition(index),
-      y: getYPosition(index)
+      x: getXPosition(index)(gridSize),
+      y: getYPosition(index)(gridSize)
     }
   }, shuffledPuzzlePieces)
   return concat(puzzlePieces, [
