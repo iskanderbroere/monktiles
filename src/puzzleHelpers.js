@@ -10,10 +10,9 @@ export const getXPosition = puzzlePieceIndex => {
   return modulo(puzzlePieceIndex, gridSize)
 }
 
-const getShuffledPuzzlePieces = () => shuffle(puzzlePieces)
+export const getShuffledPuzzlePieces = () => shuffle(puzzlePieces)
 
-export const createPuzzlePieces = () => {
-  const shuffledPuzzlePieces = getShuffledPuzzlePieces()
+export const mapPositionToPuzzlePieces = shuffledPuzzlePieces => {
   // todo - better name
   const puzzlePieces = mapIndexed((puzzlePiece, index) => {
     return {
@@ -31,4 +30,9 @@ export const createPuzzlePieces = () => {
       y: gridSize - 1
     }
   ])
+}
+
+export const createPuzzlePieces = () => {
+  const shuffledPuzzlePieces = getShuffledPuzzlePieces()
+  return mapPositionToPuzzlePieces(shuffledPuzzlePieces)
 }
