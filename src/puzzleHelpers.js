@@ -1,6 +1,6 @@
 import { shuffle } from 'lodash-es'
-import { gridSize, puzzlePieces } from '@/constants'
-import { mapIndexed } from '@/utils'
+import { gridSize } from '@/constants'
+import { mapIndexed, square } from '@/utils'
 import {
   modulo,
   concat,
@@ -12,8 +12,16 @@ import {
   sort,
   equals,
   pluck,
-  subtract
+  subtract,
+  range
 } from 'ramda'
+
+export const amountOfPuzzlePieces =
+  square(gridSize) -
+  // one empty piece
+  1
+
+export const puzzlePieceNumbers = range(1, amountOfPuzzlePieces + 1)
 
 /**
  * Get X position based on array index and grid size
@@ -117,6 +125,7 @@ export const gameIsWon = puzzlePieces => {
 }
 
 export const createPuzzlePieces = () => {
-  const shuffledPuzzlePieces = shuffle(puzzlePieces)
+  /* istanbul ignore next */
+  const shuffledPuzzlePieces = shuffle(puzzlePieceNumbers)
   return mapPositionToPuzzlePieces(shuffledPuzzlePieces)
 }

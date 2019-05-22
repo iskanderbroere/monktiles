@@ -4,7 +4,8 @@ import {
   mapPositionToPuzzlePieces,
   puzzlePieceCanBeMoved,
   movePuzzlePiece,
-  gameIsWon
+  gameIsWon,
+  createPuzzlePieces
 } from '@/puzzleHelpers'
 
 const shuffledPuzzlePieces = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
@@ -117,5 +118,11 @@ describe('gameIsWon', () => {
   it('returns true when pieces are in correct order', () => {
     const wonGame = gameIsWon(mockPuzzlePieces)
     expect(wonGame).toBe(true)
+  })
+})
+
+describe('createPuzzlePieces', () => {
+  it('return puzzle pieces', () => {
+    createPuzzlePieces
   })
 })
