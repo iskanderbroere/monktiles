@@ -30,8 +30,8 @@ export const mapPositionToPuzzlePieces = shuffledPuzzlePieces => {
     return {
       puzzlePieceNumber: puzzlePiece,
       empty: false,
-      x: getXPosition(gridSize)(index),
-      y: getYPosition(gridSize)(index)
+      x: getXPosition(gridSize, index),
+      y: getYPosition(gridSize, index)
     }
   }, shuffledPuzzlePieces)
   return concat(puzzlePieces, [
@@ -51,7 +51,11 @@ export const findEmptyPuzzlePiece = puzzlePieces =>
 export const puzzlePieceCanBeMoved = curry((puzzlePieces, { empty, x, y }) => {
   // empty puzzle piece is clicked
   if (empty) return false
+
+  // find empty puzzle piece to compare position to
   const { x: emptyX, y: emptyY } = findEmptyPuzzlePiece(puzzlePieces)
+
+  // compare positional difference
   const xDelta = emptyX - x
   const yDelta = emptyY - y
 
