@@ -11,7 +11,6 @@ import {
   omit,
   sort,
   equals,
-  dropLast,
   pluck
 } from 'ramda'
 
@@ -88,20 +87,12 @@ export const movePuzzlePiece = curry((puzzlePieces, { puzzlePieceNumber }) =>
 const getPuzzlePieceNumbers = pluck('puzzlePieceNumber')
 
 export const gameIsWon = puzzlePieces => {
+  // only the puzzle piece numbers
   const puzzlePieceNumbers = getPuzzlePieceNumbers(puzzlePieces)
+  // sort to expected order
   const sortedPuzzlePieceNumbers = sort(diff, puzzlePieceNumbers)
-  const sortedPuzzlePieceNumbersWithoutEmpty = dropLast(
-    1,
-    sortedPuzzlePieceNumbers
-  )
-  const expectedPuzzlePieceNumbersWithoutEmpty = dropLast(
-    1,
-    getPuzzlePieceNumbers(puzzlePieces)
-  )
-  return equals(
-    sortedPuzzlePieceNumbersWithoutEmpty,
-    expectedPuzzlePieceNumbersWithoutEmpty
-  )
+  // compare to original
+  return equals(sortedPuzzlePieceNumbers, getPuzzlePieceNumbers(puzzlePieces))
 }
 
 export const createPuzzlePieces = () => {
